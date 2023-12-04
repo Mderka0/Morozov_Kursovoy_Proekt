@@ -1,0 +1,240 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    
+}
+
+body, #root
+{
+    font-family: 'Montserrat', sans-serif;
+    height: 100vh;
+}
+
+h1{color: white;}
+
+/* HEADER */
+
+header {
+    
+    /* flex: 0 0 auto; */
+    background-color: #8094D9;
+    height: fit-content;
+    padding: 0 0 0.5em 0;
+
+}
+
+header > ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+
+}
+
+header > ul > li
+{
+    
+    color: white;
+    width: 15%;
+    padding: 0.4em 0;
+    text-align: center;
+    float: left;
+    margin-top: 0.4%;
+    background-color: #4E83D3;
+    box-shadow: 3px 3px 8px #3d3d3d;
+}
+
+a
+{
+    color: white;
+    text-decoration: none;
+}
+
+/* FOOTER */
+
+footer
+{
+    background-color: #8094D9;
+    /* flex: 0 0 auto; */
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    padding: 1em;    
+}
+
+.instIcon
+{
+    color: white;
+    font-size: 3em;
+    
+    
+}
+
+.App
+{
+    
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+
+}
+
+main
+{
+    display: flex;
+    justify-content: center;
+
+}
+
+
+
+/* SIGN IN */
+
+.SignIn
+{
+    width: 30em;
+    height: 20em;
+    background-color: #8094D9;
+    border-radius: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+}
+
+span 
+{
+    padding: 1.1em 0;
+    text-align: center;
+    float: left;
+    color: white;
+}
+
+.formDiv
+{
+    display: flex;
+    align-items: center;
+    font-size: 1.4em;
+    
+}
+
+input
+{
+    margin: 10px;
+    width: 90%;
+    height: 3em;
+    border-radius: 5px;
+    border: 0;
+
+}
+
+.SignInBut
+{
+    background-color: #4E83D3;
+    padding: 1em 8em;
+    border-radius: 1em;
+    border: none;
+    color: white;
+    box-shadow: 0px 0px 8px #3d3d3d;
+    transition: all 0.3s ease-in-out;
+    margin: 10px;
+
+}
+
+.SignInBut:hover
+{
+    box-shadow: 3px 3px 8px #3d3d3d;
+
+}
+
+
+.el {   
+   /*
+   border: 2px dashed #aaa; 
+   */
+ }
+
+ .container {
+
+    display: grid;
+    text-align: center;
+    justify-content: center;
+    grid-template-columns: 5em 20em;
+    height: 7em;
+    margin: 1em;
+ }
+
+
+ /* REGISTER */
+
+
+ .containerReg {
+
+    display: grid;
+    text-align: center;
+    justify-content: center;
+    grid-template-columns: 5em 20em;
+    height: 10.5em;
+    margin: 1em;
+ }
+
+
+
+ /* CONTACTS */
+
+.contactFul
+{
+    width: 100%;
+    height: 70vh;
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 1em;
+    padding: 2em;
+
+
+}
+
+.contacts
+{
+    width: 100%;
+    height: 100%;
+    background-color: #8094D9;
+    color: white;
+    font-size: 2em;
+
+}
+
+.contacts div
+{
+    padding: 1em;
+}
+
+.contacts div a
+{
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+.map
+{
+    background-color: #8094D9;
+    width: 100%;
+    height: 100%;
+
+}
+
+.mapSize
+{
+    width: 100%;
+    height: 100%;
+
+}
+
+.icon
+{
+    font-size: 2.5em;
+}
+ 
