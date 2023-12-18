@@ -8,7 +8,7 @@ const Header = () => {
             <li> Главная </li>
             <li> <Link to='/contacts'>Контакты</Link> </li>
             <li> <Link to='/login'>Личный кабинет</Link> </li>
-            <li> Бронирование </li>
+            <li> <Link to='/startBooking'>Бронирование</Link> </li>
         </ul>
         
     </header>

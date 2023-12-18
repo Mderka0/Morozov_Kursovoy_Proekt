@@ -169,6 +169,19 @@ input
 
  /* REGISTER */
 
+ .SignUp
+ {
+     width: 30em;
+     height: 32em;
+     background-color: #8094D9;
+     border-radius: 1em;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-direction: column;
+ 
+ }
+
 
  .containerReg {
 
@@ -176,11 +189,9 @@ input
     text-align: center;
     justify-content: center;
     grid-template-columns: 5em 20em;
-    height: 10.5em;
+    height: 22em;
     margin: 1em;
  }
-
-
 
  /* CONTACTS */
 
@@ -238,3 +249,46 @@ input
     font-size: 2.5em;
 }
  
+
+/* START BOOKING */
+
+
+.sBookingFul
+{
+    width: 100%;
+    height: 90vh;
+    padding: 2em;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 2em;
+}
+
+.bookingBox
+{
+    width: 95%;
+    
+    display: flex;
+    gap: 2em;
+    text-align: center;
+    justify-content: center;
+
+}
+
+.bookigPhoto
+{
+    width: 40%;
+    height: 100%;
+    background-color: #3d3d3d;
+
+}
+
+.bookigInfo
+{
+
+    width: 50%;
+    
+    height: 100%;
+    background-color: #8094D9;
+}
