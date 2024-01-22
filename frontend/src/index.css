@@ -11,6 +11,10 @@ body, #root
     height: 100vh;
 }
 
+input{
+    outline: none;
+}
+
 h1{color: white;}
 
 /* HEADER */
@@ -59,7 +63,13 @@ footer
     bottom: 0;
     display: flex;
     justify-content: center;
-    padding: 1em;    
+    padding: 1em;
+
+}
+
+footer a 
+{
+    display: flex;
 }
 
 .instIcon
@@ -195,100 +205,348 @@ input
 
  /* CONTACTS */
 
-.contactFul
-{
-    width: 100%;
-    height: 70vh;
-    display: grid;
-    grid-template-columns: 3fr 2fr;
-    gap: 1em;
-    padding: 2em;
-
-
-}
-
-.contacts
-{
-    width: 100%;
-    height: 100%;
-    background-color: #8094D9;
-    color: white;
-    font-size: 2em;
-
-}
-
-.contacts div
-{
-    padding: 1em;
-}
-
-.contacts div a
-{
-    display: flex;
-    align-items: center;
-    gap: 1em;
-}
-
-.map
-{
-    background-color: #8094D9;
-    width: 100%;
-    height: 100%;
-
-}
-
-.mapSize
-{
-    width: 100%;
-    height: 100%;
-
-}
-
-.icon
-{
-    font-size: 2.5em;
-}
+ .contactFul
+ {
+     width: 100%;
+     height: 70vh;
+     display: grid;
+     grid-template-columns: 3fr 2fr;
+     gap: 1em;
+     padding: 2em;
  
+ }
+ 
+ .contacts
+ {
+     width: 100%;
+     height: 100%;
+     background-color: #8094D9;
+     color: white;
+     font-size: 2em;
+ 
+ }
+ 
+ .contacts div
+ {
+     padding: 1em;
+ }
+ 
+ .contacts div a
+ {
+     display: flex;
+     align-items: center;
+     gap: 1em;
+ }
+ 
+ .map
+ {
+     background-color: #8094D9;
+     width: 100%;
+     height: 100%;
+ 
+ }
+ 
+ .mapSize
+ {
+     width: 100%;
+     height: 100%;
+ 
+ }
+ 
+ .icon
+ {
+     font-size: 2.5em;
+ }
+  
+ 
+ /* START BOOKING */
+ 
+ 
+ .sBookingFul
+ {
+     width: 100%;
+     height: auto;
+     padding: 2em;
+     display: flex;
+     text-align: center;
+     justify-content: center;
+     flex-direction: column;
+ 
+ }
+ 
+ .bookingBox
+ {
+     width: 100%;
+     height: 35vh;
+     display: flex;
+     gap: 2em;
+     text-align: center;
+     justify-content: center;
+     padding-top: 1em;
+     padding-bottom: 1em;
+ 
+ }
+ 
+ .bookigPhoto
+ {
+     width: 40%;
+     height: 100%;
+     
+     
+ 
+ }
 
-/* START BOOKING */
+ .bookigPhoto img 
+ {
+    height: 100%;
+
+ }
+ 
+ .bookigInfo
+ {
+     width: 50%;
+     height: 100%;
+     background-color: #8094D9;
+     color: white;
+     justify-content: center;
+     position: relative;
+     display: flex;
+     flex-direction: column;
+     
+     align-items: center;
+     justify-content: space-around;
+ }
+
+ .bookigInfo span
+ {
+    font-size: 1.2em;
+ }
+ 
+ .StartBookingBut
+ {
+     width: 60%;
+     background-color: #4E83D3;
+     padding: 0.5em 1em;
+     border-radius: 0.8em;
+     border: none;
+     color: white;
+     box-shadow: 0px 0px 8px #3d3d3d;
+     transition: all 0.3s ease-in-out;
+     margin: 5px;
+     bottom: 5px;
+     
+ }
+ 
+ .StartBookingBut:hover
+ {
+     box-shadow: 3px 3px 8px #3d3d3d;
+ 
+ }
+ 
+ 
+ /* MAIN */
+ 
+ .Full
+ {
+     width: 100%;
+     height: auto;
+     display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+ }
+ 
+ .mainBox
+ {
+     width: 100%;
+     height: 35em;
+     display: flex;
+     gap: 2em;
+     text-align: center;
+     justify-content: center;
+     padding-top: 1em;
+     padding-bottom: 1em;
+ }
+ 
+ .mainPhoto
+ {
+     width: 40%;
+     height: 100%;
+     background-color: #3d3d3d;
+ }
+ 
+ .mainInfo
+ {
+     width: 55%;
+     height: 100%;
+     background-color: #8094D9;
+     color: white;
+ }
+ 
+ .treatmentInfo
+ {
+     width: 100%;
+     height: 10em;
+     margin: 0;
+     padding: 0;
+     background-color: #8094D9;
+     color: white;
+     text-align: center;
+     display: grid;
+     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+     gap: 1em;
+ 
+ }
+ 
+ .treatmentInfoText
+ {
+     width: 100%;
+     height: 2.5em;
+     margin: 0;
+     padding-top: 0.4em;
+     background-color: #8094D9;
+     color: white;
+     text-align: center;
+     justify-content: center;
+ 
+ }
 
 
-.sBookingFul
-{
-    width: 100%;
-    height: 90vh;
-    padding: 2em;
-    display: flex;
+
+
+ /* PROFILE */ 
+
+
+.profileContainer {
+
+    display: grid;
     text-align: center;
     justify-content: center;
+    grid-template-columns: 15em 15em;
+    height: 7em;
+    margin: 1em;
+ }
+ 
+ .profileContainer span
+ {
+    
+ }
+
+
+ .profileInfoSpace
+ {
+    width: 80%;
+    height: 18em;
+    display: flex;
+    gap: 2em;
+    text-align: center;
+    justify-content: center;
+    padding-top: 1em;
+    padding-bottom: 1em;
+ }
+
+ .profilePhoto
+ {
+    width: 12em;
+    height: 16em;
+    background-color: #8094D9;
+
+ }
+
+ .profileInfo
+{
+    width: 90%;
+    height: 16em;
+    background-color: #8094D9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profileBookingInfo
+{
+    width: 80%;
+    height: 40em;
+    background-color: #8094D9;
+    margin-bottom: 3em;
+    color: white;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
     flex-direction: column;
     gap: 2em;
 }
 
-.bookingBox
+.profileBookingInfo table
 {
-    width: 95%;
+    border: 2px solid gray;
+    border-collapse: collapse;
+    width: 90%;
+    margin-top: 1em;
     
+}
+.profileBookingInfo table td
+{
+    border: 1px solid gray;
+}
+
+.profileBookingInfo span
+{
+    font-size: 52px;
+}
+
+
+/* Booking */ 
+
+
+.BookingWindow
+{
+    position: fixed;
     display: flex;
-    gap: 2em;
-    text-align: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    backdrop-filter: blur(1.5rem);
+    align-items: center;
     justify-content: center;
 
 }
 
-.bookigPhoto
+.BookingComponent
 {
-    width: 40%;
-    height: 100%;
-    background-color: #3d3d3d;
+    background-color: #4E83D3;
+    display: flex;
+    color: white;
+    padding: 1em;
+    font-size: 24px;
+    border-radius: 1em;
+    flex-direction: column;
+
 
 }
 
-.bookigInfo
-{
-
-    width: 50%;
-    
-    height: 100%;
-    background-color: #8094D9;
+.closeBooking{
+    align-self: flex-end;
+    font-size: 32px;
+    transition: all 0.5s ease-in-out ;
 }
+
+.closeBooking:hover
+{
+    background-color: red;
+    border-radius: 50%;
+    transform: rotate(180deg);
+
+}
+
+.bookingContainer {
+
+    display: grid;
+    text-align: center;
+    justify-content: center;
+    grid-template-columns: 20fr 20fr;
+
+    margin: 0.3em;
+ }    
+

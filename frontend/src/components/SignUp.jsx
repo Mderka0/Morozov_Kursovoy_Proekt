@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const SignUp = () => {
+    const navigate = useNavigate();
     const [user, setUser] = useState({
         name: '',
         email: '',
@@ -16,12 +17,29 @@ const SignUp = () => {
             alert("Пароли не совпадают!")
         } else if (user.password === '') {
             alert("Введите пароль");
+        } else if (user.email === '' || user.name === '' || user.phone === '') {
+            alert("Заполните пустые поля");
         } else {
-            axios.post('/api/add_guest', user);
+            
+
+            axios.post('/api/add_guest', user).then((data) => {
+                if (data.data.Negative === true) {
+                    alert(data.data.Message);
+                }
+                else{
+                    sessionStorage.setItem('name', user.name);
+                    sessionStorage.setItem('email', user.email);
+                    sessionStorage.setItem('phone', user.phone);
+                    sessionStorage.setItem('auth', "1");
+                    navigate('/');
+
+                }
+            });
         }
     }
 
     return (
+
         <form className='SignUp'>
 
             <div className="containerReg">
@@ -59,7 +77,7 @@ const SignUp = () => {
             {/* <button className='SignInBut'> 
                 Зарегестрироваться
             </button> */}
-            <input type="button" value="Зарегестрироваться" className='SignInBut' onClick={handleUser}/>
+            <input type="submit" value="Зарегестрироваться" className='SignInBut' onClick={handleUser}/>
             <Link to='/login'>Войти</Link>
         </form>
   )
