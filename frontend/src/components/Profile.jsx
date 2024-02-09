@@ -38,7 +38,7 @@ const Profile = () => {
                     </div>
                     <input type="button" value="Выйти из аккаунта" onClick={handleLogout} />
                 </div>
-
+1
             </div>
             <div className='profileBookingInfo'>
                 <table>
