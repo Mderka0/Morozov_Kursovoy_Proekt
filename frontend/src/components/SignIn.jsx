@@ -17,14 +17,16 @@ const SignIn = () => {
                     sessionStorage.setItem('name', data.data.name);
                     sessionStorage.setItem('email', data.data.email);
                     sessionStorage.setItem('phone', data.data.phone);
+                    sessionStorage.setItem('root', data.data.root);
                     sessionStorage.setItem('auth', "1");
                     navigate('/');
+                    window.location.reload();
                 }
             })
         }
     }
   return (
-        <form className='SignIn'>
+        <form className='SignIn' >
 
             <div className="container">
                 <div class="el el-1">
@@ -40,7 +42,7 @@ const SignIn = () => {
                     <input type="password" onChange={(e) => {SetUser({...user,password: e.target.value})}} placeholder='Введите свой пароль'/>
                 </div>
             </div>
-            <input type='submit' value='Войти' className='SignInBut' onClick={handleLogin}/>
+            <input  type='submit' value='Войти' className='SignInBut' onClick={handleLogin}/>
             <Link to='/signup'>Зарегестрироваться</Link>
         </form>
 

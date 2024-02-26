@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import SelfBooking from './ProfileComponents/SelfBooking';
+import AllUsers from './ProfileComponents/AllUsers';
+import AllBooking from './ProfileComponents/AllBooking';
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -8,16 +11,18 @@ const Profile = () => {
         sessionStorage.clear();
         navigate('/login');
     }
-    const [books, setBooks] = useState([]);
-    const [mes, setMes] = useState('');
-    useEffect(() => {
-        axios.post('/api/get_books', { email: sessionStorage.getItem('email') }).then((data) => {
-            setMes(data.data.Message);
-            if (!data.data.Negative) {
-                setBooks(data.data.Books);
-            }
-        })
-    }, [books])
+    const [info, setInfo] = useState(0);
+    // const profiles = [<SelfBooking/>, <AllBooking/>, <AllUsers/>]
+    const getProfile = (x) => {
+        switch (x){
+            case 1:
+                return <AllBooking/>
+            case 2:
+                return <AllUsers/>
+            default:
+                return <SelfBooking/> 
+        }
+    }
     return (
         <div className='Full'>
             <div className='profileInfoSpace'>
@@ -35,65 +40,25 @@ const Profile = () => {
                             <span>Телефон: {sessionStorage.getItem('phone')}</span>
                         </div>
 
+                        <div class="el el-4">
+                            <span>Статус: {sessionStorage.getItem('root')==="1"?"Пользователь": (sessionStorage.getItem('root')==="2"?"Менеджер" : "Админ")}</span>
+                            
+                        </div>
                     </div>
                     <input type="button" value="Выйти из аккаунта" onClick={handleLogout} />
                 </div>
-1
+
             </div>
+            {sessionStorage.getItem("root") > 1 && (
+                <div className="profileAdmin" >
+                    <input type="button" onClick={() => {setInfo(0)}} value="Свои брони" />
+                    <input type="button" onClick={() => {setInfo(1)}} value="Все брони пользователей"/>
+                    <input type="button" onClick={() => {setInfo(2)}} value="Все пользователи"/>
+                </div>
+            )}
+            
             <div className='profileBookingInfo'>
-                <table>
-                    <tr>
-                        <td>
-                            ID
-                        </td>
-                        <td>
-                            Email
-                        </td>
-                        <td>
-                            Класс номера
-                        </td>
-                        <td>
-                            Дата заезда
-                        </td>
-                        <td>
-                            Дата выезда
-                        </td>
-                        <td>
-                            Цена
-                        </td>
-                    </tr>
-                    {books.map((book) => {
-                        return (
-                            <tr key={book.id}>
-                                <td>
-                                    {book.id}
-                                </td>
-                                <td>
-                                    {book.GstEmail}
-                                </td>
-                                <td>
-                                    {book.ApsClass}
-                                </td>
-                                <td>
-                                    {book.BokDateSt}
-                                </td>
-                                <td>
-                                    {book.BokDateFn}
-                                </td>
-                                <td>
-                                    {book.BokCost}
-                                </td>
-                            </tr>
-                        )
-                    })}
-
-
-                </table>
-
-                <span>
-                    {mes}
-
-                </span>
+                {getProfile(info)}
             </div>
 
         </div>

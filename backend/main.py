@@ -11,15 +11,14 @@ cur = con.cursor()
 
 @app.route('/api/users')
 def get_guests():
-    print('test')
     cur.execute('SELECT * FROM guest')
     users: list[dict] = []
     for i in cur.fetchall():
         user = dict()
-        user['id'] = i[0]
-        user['name'] = i[1]
-        user['phone'] = i[2]
-        user['email'] = i[3]
+        user['name'] = i[0]
+        user['phone'] = i[1]
+        user['email'] = i[2]
+        user['root'] = i[4]
         users.append(user)
     
     return users
@@ -27,15 +26,15 @@ def get_guests():
 @app.route('/api/add_guest', methods=['POST'])
 def add_user():
     user = request.get_json()
-    print(user)
-    print(sha256(user.get('password').encode('utf8')).hexdigest())
+    # print(user)
+    # print(sha256(user.get('password').encode('utf8')).hexdigest())
     cur.execute("SELECT * FROM Guest WHERE GstEmail = ? OR GstPhone = ?", (user['email'], user['phone'] ,))
     con.commit()
     res = cur.fetchone()
     if res is None:
-        cur.execute("INSERT INTO Guest VALUES (?, ?, ?, ?, ?)", (None, user['name'], user['phone'], user['email'], sha256(f'{user["password"]}'.encode('utf8')).hexdigest(), ))
+        cur.execute("INSERT INTO Guest VALUES (?, ?, ?, ?, ?)", (user['name'], user['phone'], user['email'], sha256(f'{user["password"]}'.encode('utf8')).hexdigest(), 1, ))
         con.commit()
-    elif res[2] == user['phone']:
+    elif res[1] == user['phone']:
         return {"Message": "Пользователь с таким Номером телефона уже существует", "Negative": True}
     else:
         return {"Message": "Пользователь с таким Email уже существует", "Negative": True}
@@ -50,7 +49,8 @@ def login_user():
     con.commit()
     res = cur.fetchone()
     if res is None: return {"Message": "Пользователь не найден", "Negative": True}
-    return {"Message": "Вход выполнен успешно", "Negative": False, 'phone' : res [2], 'name' : res [1], 'email' : res [3]}
+    return {"Message": "Вход выполнен успешно", "Negative": False, 'phone' : res [1], 'name' : res [0], 'email' : res [2], 'root' : res [4]}
+
 
 @app.route('/api/get_appartments')
 def get_appartments():
@@ -59,17 +59,16 @@ def get_appartments():
     data = []
     for i in cur.fetchall():
         temp = dict()
-        temp['id'] = i[0]
-        temp['clas'] = i[1]
-        temp['description'] = i[2]
-        temp['image'] = i[3]
+        temp['clas'] = i[0]
+        temp['description'] = i[1]
+        temp['image'] = i[2]
         data.append(temp)
     return data
 
 @app.route('/api/add_book',  methods=['POST'])
 def add_book():
     data = (request.get_json())
-    cur.execute("INSERT INTO booking VALUES (?, ?, ?, ?, ?, ?)", (None, data['ApsClass'], data['GstEmail'], data['BokCost'], data['BokDateSt'], data['BokDateFn'],))
+    cur.execute("INSERT INTO booking VALUES (?, ?, ?, ?, ?, ?, ?)", (None, data['ApsClass'], data['GstEmail'], data['BokCost'], data['BokDateSt'], data['BokDateFn'], 'Ожидает заселения',))
     con.commit()
       
     return {"Message": "Успешно добавлен", "Negative": False}
@@ -88,6 +87,29 @@ def get_books():
         temp['BokCost'] = book[3]
         temp['BokDateSt'] = book[4]
         temp['BokDateFn'] = book[5]
+        temp['BokStatus'] = book[6]
+        data.append(temp)
+                
+    if data: 
+        return {"Message": "", "Negative": False, 'Books': data}
+    return{"Message": "Пока пусто", "Negative": True}
+
+
+
+@app.route('/api/get_all_books')
+def get_all_books():
+    cur.execute("Select * from booking")
+    con.commit()
+    data = []
+    for book in cur.fetchall():
+        temp = dict()
+        temp['id'] = book[0]
+        temp['ApsClass'] = book[1]
+        temp['GstEmail'] = book[2]
+        temp['BokCost'] = book[3]
+        temp['BokDateSt'] = book[4]
+        temp['BokDateFn'] = book[5]
+        temp['BokStatus'] = book[6]
         data.append(temp)
                 
     if data: 

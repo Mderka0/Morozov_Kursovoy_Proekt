@@ -5,6 +5,12 @@
     
 }
 
+:root
+{
+    --firstColor: #8094D9;
+    --secondColor: #4E83D3;
+}
+
 body, #root
 {
     font-family: 'Montserrat', sans-serif;
@@ -22,7 +28,7 @@ h1{color: white;}
 header {
     
     /* flex: 0 0 auto; */
-    background-color: #8094D9;
+    background-color: var(--firstColor);
     height: fit-content;
     padding: 0 0 0.5em 0;
 
@@ -44,7 +50,7 @@ header > ul > li
     text-align: center;
     float: left;
     margin-top: 0.4%;
-    background-color: #4E83D3;
+    background-color: var(--secondColor);
     box-shadow: 3px 3px 8px #3d3d3d;
 }
 
@@ -58,7 +64,7 @@ a
 
 footer
 {
-    background-color: #8094D9;
+    background-color: var(--firstColor);
     /* flex: 0 0 auto; */
     bottom: 0;
     display: flex;
@@ -105,7 +111,7 @@ main
 {
     width: 30em;
     height: 20em;
-    background-color: #8094D9;
+    background-color: var(--firstColor);
     border-radius: 1em;
     display: flex;
     align-items: center;
@@ -142,7 +148,7 @@ input
 
 .SignInBut
 {
-    background-color: #4E83D3;
+    background-color: var(--secondColor);
     padding: 1em 8em;
     border-radius: 1em;
     border: none;
@@ -183,7 +189,7 @@ input
  {
      width: 30em;
      height: 32em;
-     background-color: #8094D9;
+     background-color: var(--firstColor);
      border-radius: 1em;
      display: flex;
      align-items: center;
@@ -220,7 +226,7 @@ input
  {
      width: 100%;
      height: 100%;
-     background-color: #8094D9;
+     background-color: var(--firstColor);
      color: white;
      font-size: 2em;
  
@@ -240,7 +246,7 @@ input
  
  .map
  {
-     background-color: #8094D9;
+     background-color: var(--firstColor);
      width: 100%;
      height: 100%;
  
@@ -306,7 +312,7 @@ input
  {
      width: 50%;
      height: 100%;
-     background-color: #8094D9;
+     background-color: var(--firstColor);
      color: white;
      justify-content: center;
      position: relative;
@@ -325,7 +331,7 @@ input
  .StartBookingBut
  {
      width: 60%;
-     background-color: #4E83D3;
+     background-color: var(--secondColor);
      padding: 0.5em 1em;
      border-radius: 0.8em;
      border: none;
@@ -379,7 +385,7 @@ input
  {
      width: 55%;
      height: 100%;
-     background-color: #8094D9;
+     background-color: var(--firstColor);
      color: white;
  }
  
@@ -389,7 +395,7 @@ input
      height: 10em;
      margin: 0;
      padding: 0;
-     background-color: #8094D9;
+     background-color: var(--firstColor);
      color: white;
      text-align: center;
      display: grid;
@@ -404,7 +410,7 @@ input
      height: 2.5em;
      margin: 0;
      padding-top: 0.4em;
-     background-color: #8094D9;
+     background-color: var(--firstColor);
      color: white;
      text-align: center;
      justify-content: center;
@@ -449,7 +455,7 @@ input
  {
     width: 12em;
     height: 16em;
-    background-color: #8094D9;
+    background-color: var(--firstColor);
 
  }
 
@@ -457,7 +463,7 @@ input
 {
     width: 90%;
     height: 16em;
-    background-color: #8094D9;
+    background-color: var(--firstColor);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -467,7 +473,7 @@ input
 {
     width: 80%;
     height: 40em;
-    background-color: #8094D9;
+    background-color: var(--firstColor);
     margin-bottom: 3em;
     color: white;
     font-size: 20px;
@@ -490,12 +496,49 @@ input
     border: 1px solid gray;
 }
 
+.profileBookingInfo table tr:nth-child(2n+1) 
+{
+    background-color: var(--secondColor); 
+}
+
+.profileBookingInfo table tr:hover td
+{
+    filter: brightness(80%);
+    padding: 0.3em 0;
+}
+
 .profileBookingInfo span
 {
     font-size: 52px;
 }
 
+.profileAdmin{
+    width: 80%;
+    height: fit-content;
+    background-color: var(--firstColor);
+    margin-bottom: 3em;
+    padding: 1em 0em;
+    color: white;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.5em;
+}
 
+.profileAdmin input 
+{
+    font-size: 1em;
+    background-color: var(--secondColor);
+    color: white;
+    border-radius: 1em;
+    transition: all 0.5s ease-in-out;
+
+}
+
+.profileAdmin input:hover
+{
+    box-shadow: 0 0 2em var(--secondColor);
+}
 /* Booking */ 
 
 
@@ -515,7 +558,7 @@ input
 
 .BookingComponent
 {
-    background-color: #4E83D3;
+    background-color: var(--secondColor);
     display: flex;
     color: white;
     padding: 1em;

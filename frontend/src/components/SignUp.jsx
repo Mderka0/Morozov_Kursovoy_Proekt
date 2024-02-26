@@ -30,9 +30,10 @@ const SignUp = () => {
                     sessionStorage.setItem('name', user.name);
                     sessionStorage.setItem('email', user.email);
                     sessionStorage.setItem('phone', user.phone);
+                    sessionStorage.setItem('root', '1');
                     sessionStorage.setItem('auth', "1");
                     navigate('/');
-
+                    window.location.reload();
                 }
             });
         }
