@@ -472,15 +472,15 @@ input
 .profileBookingInfo
 {
     width: 80%;
-    height: 40em;
+    min-height: 40em;
     background-color: var(--firstColor);
-    margin-bottom: 3em;
+    margin-bottom: 1em;
     color: white;
     font-size: 20px;
     display: flex;
     align-items: center;
     flex-direction: column;
-    gap: 2em;
+    gap: 0.1em;
 }
 
 .profileBookingInfo table
@@ -489,6 +489,7 @@ input
     border-collapse: collapse;
     width: 90%;
     margin-top: 1em;
+    
     
 }
 .profileBookingInfo table td
@@ -533,6 +534,41 @@ input
     border-radius: 1em;
     transition: all 0.5s ease-in-out;
 
+}
+
+.filtres
+{
+
+    display: flex;
+    color: white;
+    padding: 1em;
+    font-size: 1em;
+    border-radius: 1em;
+    flex-direction: column;
+    width: 90%;
+}
+
+.filtres span 
+{
+    font-size: 0.9em;
+}
+
+.allBookContainer
+{
+    display: grid;
+    text-align: center;
+    justify-content: left;
+    grid-template-columns: 10fr 20fr 10fr 20fr 10fr 20fr ;
+    margin: 0.3em;
+}
+
+.allUsersContainer
+{
+    display: grid;
+    text-align: center;
+    justify-content: left;
+    grid-template-columns: 10fr 20fr 10fr 20fr ;
+    margin: 0.3em;
 }
 
 .profileAdmin input:hover

@@ -59,7 +59,7 @@ const Booking = ({ classBooking, classBook }) => {
         else if (classBook == 'B') {
             k = 3000
         }
-        else if (classBook == 'С') {
+        else if (classBook == 'C') {
             k = 5000
         }
 

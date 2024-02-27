@@ -68,7 +68,7 @@ def get_appartments():
 @app.route('/api/add_book',  methods=['POST'])
 def add_book():
     data = (request.get_json())
-    cur.execute("INSERT INTO booking VALUES (?, ?, ?, ?, ?, ?, ?)", (None, data['ApsClass'], data['GstEmail'], data['BokCost'], data['BokDateSt'], data['BokDateFn'], 'Ожидает заселения',))
+    cur.execute("INSERT INTO booking VALUES (?, ?, ?, ?, ?, ?, ?)", (None, data['ApsClass'], data['GstEmail'], data['BokCost'], data['BokDateSt'], data['BokDateFn'], 'Ожидает подтверждения',))
     con.commit()
       
     return {"Message": "Успешно добавлен", "Negative": False}
