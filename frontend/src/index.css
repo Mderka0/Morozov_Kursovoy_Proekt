@@ -506,6 +506,17 @@ input
 {
     filter: brightness(80%);
     padding: 0.3em 0;
+
+}
+
+.profileBookingInfo table tr:hover td svg
+{
+    font-size: 35px;
+}
+
+.profileBookingInfo table tr td svg:hover
+{
+    color: black;
 }
 
 .profileBookingInfo span
@@ -629,3 +640,13 @@ input
     margin: 0.3em;
  }    
 
+
+.EditBookWindow
+{
+    background-color: #3d3d3d38;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+}

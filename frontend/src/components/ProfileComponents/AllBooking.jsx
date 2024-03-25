@@ -1,6 +1,8 @@
 
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
+import { MdEdit } from "react-icons/md";
+import EditBook from './Edit/EditBook';
 
 const AllBooking = () => {
     const [filtres, setFiltres] = useState({
@@ -13,6 +15,7 @@ const AllBooking = () => {
     const [allBooks, setAllBooks] = useState([]);
     const [allBooks2, setAllBooks2] = useState([]);
     const [Emails, setEmails] = useState([]);
+    const [Edit, setEdit] = useState({isEdit: false});
     useEffect(() => {
         axios.get('/api/get_all_books').then((data) => {
             setAllBooks(data.data.Books.reverse());
@@ -26,6 +29,7 @@ const AllBooking = () => {
         })
     }, [setAllBooks])
 
+    
     
     
     const changeData = () => { 
@@ -45,6 +49,10 @@ const AllBooking = () => {
         }
         setAllBooks(temp)
         
+    }
+
+    const handleEdit = (book) => {
+        setEdit({...book, isEdit: true})
     }
 
     return (
@@ -131,6 +139,7 @@ const AllBooking = () => {
                     <td>
                         Статус
                     </td>
+                    {sessionStorage.getItem('root')>=1 && <td>Редактирование</td>}
                 </tr>
                 {allBooks.map((Book) => {
                     return (
@@ -156,12 +165,15 @@ const AllBooking = () => {
                             <td>
                                 {Book.BokStatus}
                             </td>
+                            {sessionStorage.getItem('root')>=1 && <td><MdEdit onClick={() => {handleEdit(Book)}}/></td> }
+
                         </tr>
                     )
                 })}
 
 
             </table>
+            {Edit.isEdit && <EditBook close = {setEdit} info = {Edit}/>}
         </>
 
     )

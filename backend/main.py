@@ -94,7 +94,30 @@ def get_books():
         return {"Message": "", "Negative": False, 'Books': data}
     return{"Message": "Пока пусто", "Negative": True}
 
-
+@app.route('/api/deleteBook', methods=['POST'])
+def del_books():
+    id_ = request.get_json()['id']
+    email = request.get_json()['email']
+    cur.execute("update booking set BokStatus = 'Отменён' where BokID = ?", (id_, ))
+    con.commit()
+    cur.execute("select * from booking where GstEMail = ?", (email, ))
+    con.commit()
+    data = []
+    for book in cur.fetchall():
+        temp = dict()
+        temp['id'] = book[0]
+        temp['ApsClass'] = book[1]
+        temp['GstEmail'] = book[2]
+        temp['BokCost'] = book[3]
+        temp['BokDateSt'] = book[4]
+        temp['BokDateFn'] = book[5]
+        temp['BokStatus'] = book[6]
+        data.append(temp)
+                
+    if data: 
+        return {"Message": "", "Negative": False, 'Books': data}
+    return{"Message": "Пока пусто", "Negative": True}
+    
 
 @app.route('/api/get_all_books')
 def get_all_books():

@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
+import { MdDelete } from "react-icons/md";
 
 const SelfBooking = () => {
     const [books, setBooks] = useState([]);
@@ -13,6 +14,16 @@ const SelfBooking = () => {
             }
         })
     }, [setBooks])
+
+    const handleDelete = (id_) => {
+        axios.post('/api/deleteBook', {id:id_,  email: sessionStorage.getItem('email')}).then((data) => {
+            setMes(data.data.Message);
+            if (!data.data.Negative) {
+                setBooks(data.data.Books.reverse());
+            }
+        })
+
+    }
     
     return (
         <>
@@ -39,6 +50,7 @@ const SelfBooking = () => {
                     <td>
                         Статус
                     </td>
+                    <td>Удалить</td>
                 </tr>
                 {books.map((book) => {
                     return (
@@ -64,7 +76,9 @@ const SelfBooking = () => {
                             <td>
                                 {book.BokStatus}
                             </td>
+                            <td>{book.BokStatus != 'Отменён' && <MdDelete onClick={() => {handleDelete(book.id)}}/>}</td>
                         </tr>
+                        
                     )
                 })}
 

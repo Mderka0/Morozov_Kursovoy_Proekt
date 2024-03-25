@@ -5,6 +5,7 @@ import SelfBooking from './ProfileComponents/SelfBooking';
 import AllUsers from './ProfileComponents/AllUsers';
 import AllBooking from './ProfileComponents/AllBooking';
 
+
 const Profile = () => {
     const navigate = useNavigate();
     const handleLogout = () => {
