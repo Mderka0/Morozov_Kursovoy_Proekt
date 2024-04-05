@@ -1,6 +1,8 @@
 
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
+import { MdEdit } from "react-icons/md";
+import EditUser from './Edit/EditUser';
 
 const AllUsers = () => {
 
@@ -17,6 +19,7 @@ const AllUsers = () => {
     const [FIOs, setFIOs] = useState([]);
     const [Emails, setEmails] = useState([]);
     const [Phones, setPhones] = useState([]);
+    const [Edit, setEdit] = useState({isEdit: false});
     useEffect(() => {
         axios.get('/api/users').then((data) => {
         setUsers(data.data.reverse());
@@ -37,7 +40,7 @@ const AllUsers = () => {
         })
         setFIOs([...new Set(temp)])
         })
-    }, [setUsers])
+    }, [setUsers, setEdit])
 
     const changeData = () => { 
         console.log(filtres);
@@ -62,6 +65,10 @@ const AllUsers = () => {
         
     }
     
+    const handleEdit = (user) => {
+        setEdit({...user, isEdit: true})
+    }
+
     return (
         <>
 
@@ -130,6 +137,7 @@ const AllUsers = () => {
                     <td>
                         Статус
                     </td>
+                    {sessionStorage.getItem('root')>=1 && <td>Редактирование</td>}
                 </tr>
                 {users.map((user, id) => {
                     return (
@@ -147,12 +155,14 @@ const AllUsers = () => {
                         
                                 {user.root=="1"?"Пользователь": (user.root=="2"?"Менеджер" : "Админ")}
                             </td>
+                            {sessionStorage.getItem('root')>=2 && <td><MdEdit onClick={() => {handleEdit(user)}}/></td> }
                         </tr>
                     )
                 })}
 
 
             </table>
+            {Edit.isEdit && <EditUser close = {setEdit} info = {Edit}/>}
         </>
     )
 }

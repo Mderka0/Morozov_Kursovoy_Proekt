@@ -27,7 +27,7 @@ const AllBooking = () => {
             setEmails([...new Set(temp)])
          
         })
-    }, [setAllBooks])
+    }, [setAllBooks, setEdit])
 
     
     

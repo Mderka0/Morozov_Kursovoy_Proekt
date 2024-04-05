@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 
 const MainPage = () => {
   return (
     <div className='Full'>
         <div className="mainBox">
-            <div className="mainPhoto"> </div>
+            <div className="mainPhoto">
+              <img src="/img/osnovnaya.png" />
+            </div>
             <div className="mainInfo"> </div>
 
         </div>
@@ -17,17 +20,23 @@ const MainPage = () => {
 
       <div className="mainBox">
         
-        <div className="mainPhoto"> </div>
+        <div className="mainPhoto">
+          <img src="/img/prozhivanie.png" />
+        </div>
         <div className="mainInfo"> </div>
 
       </div>
       <div className="mainBox">
-        <div className="mainPhoto"> </div>
+        <div className="mainPhoto"> 
+          <img src="/img/dosug.png" />
+        </div>
         <div className="mainInfo"> </div>
 
       </div>
       <div className="mainBox">
-        <div className="mainPhoto"> </div>
+        <div className="mainPhoto">
+          <img src="/img/lechenie.png" />
+        </div>
         <div className="mainInfo"> </div>
 
       </div>

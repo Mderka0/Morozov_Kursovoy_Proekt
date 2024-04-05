@@ -2,11 +2,14 @@ import sqlite3
 from hashlib import sha256
 from flask import Flask, request, send_file
 from flask_cors import CORS
+from uuid import uuid4
 
 app = Flask(__name__)
 CORS(app)
 con = sqlite3.connect("hostel.db", check_same_thread=False)
 cur = con.cursor()
+
+users = dict()
 
 
 @app.route('/api/users')
@@ -138,6 +141,23 @@ def get_all_books():
     if data: 
         return {"Message": "", "Negative": False, 'Books': data}
     return{"Message": "Пока пусто", "Negative": True}
+
+
+@app.route('/api/update_book', methods=['POST'])
+def upd_books():
+    data = request.get_json()
+    cur.execute("update booking set BokStatus = ?, ApsClass = ?, BokCost = ? where BokID = ?", (data['BokStatus'], data['ApsClass'], data['BokCost'], data['id']))
+    con.commit()
+    return ''    
+    
+@app.route('/api/update_user', methods=['POST'])
+def upd_user():
+    data = request.get_json()
+    cur.execute("update Guest set GstFullName = ?, GstPhone = ?, GstEmail = ?, GstRoot = ? where GstEmail = ?", (data['name'], data['phone'], 
+                                                                                                                 data['email'], data['root'], data['email']))
+    con.commit()
+    return ''    
+    
 
 
 # CREATE TABLE IF NOT EXISTS Guest
