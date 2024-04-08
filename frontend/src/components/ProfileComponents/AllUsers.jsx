@@ -1,11 +1,29 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext} from 'react'
 import axios from 'axios';
 import { MdEdit } from "react-icons/md";
 import EditUser from './Edit/EditUser';
+import UserToken from '../../Context';
 
 const AllUsers = () => {
 
+    const {Token, setToken} = useContext(UserToken);
+    const[user, setUser] = useState({
+        name:'', phone:'', email:'', root:''
+    })
+
+    useEffect(() => {
+        axios.post('/api/get_user', {token:Token})
+        .then((data) => {
+            setUser({
+                name:data.data.name,
+                phone:data.data.phone,
+                email:data.data.email,
+                root:data.data.root
+            })
+        })
+    }, [setUser])
+    
     const [filtres, setFiltres] = useState({
         Fio: '',
         Email: '',
@@ -137,25 +155,25 @@ const AllUsers = () => {
                     <td>
                         Статус
                     </td>
-                    {sessionStorage.getItem('root')>=1 && <td>Редактирование</td>}
+                    {user?.root>=1 && <td>Редактирование</td>}
                 </tr>
-                {users.map((user, id) => {
+                {users.map((user_cur, id) => {
                     return (
                         <tr key={id}>
                             <td>
-                                {user.name}
+                                {user_cur.name}
                             </td>
                             <td>
-                                {user.phone}
+                                {user_cur.phone}
                             </td>
                             <td>
-                                {user.email}
+                                {user_cur.email}
                             </td>
                             <td>
                         
-                                {user.root=="1"?"Пользователь": (user.root=="2"?"Менеджер" : "Админ")}
+                                {user_cur.root=="1"?"Пользователь": (user_cur.root=="2"?"Менеджер" : "Админ")}
                             </td>
-                            {sessionStorage.getItem('root')>=2 && <td><MdEdit onClick={() => {handleEdit(user)}}/></td> }
+                            {user?.root>=2 && <td><MdEdit onClick={() => {handleEdit(user_cur)}}/></td> }
                         </tr>
                     )
                 })}

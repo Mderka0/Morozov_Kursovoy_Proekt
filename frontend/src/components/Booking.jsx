@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect, useContext} from "react";
 import React from 'react'
 import axios from 'axios';
 import { IoMdClose } from "react-icons/io";
+import UserToken from "../Context";
 
 const Booking = ({ classBooking, classBook }) => {
     const [start, setStart] = useState();
@@ -15,6 +16,25 @@ const Booking = ({ classBooking, classBook }) => {
     //     BokDateFn: ''
 
     // });
+
+    const {Token, setToken} = useContext(UserToken);
+
+    const[user, setUser] = useState({
+        name:'', phone:'', email:'', root:''
+    })
+
+    useEffect(() => {
+        axios.post('/api/get_user', {token:Token})
+        .then((data) => {
+            setUser({
+                name:data.data.name,
+                phone:data.data.phone,
+                email:data.data.email,
+                root:data.data.root
+            })
+        })
+    }, [setUser])
+
     const changeDate = (e) => {
         setStart(e.target);
         if (end != undefined) {
@@ -36,7 +56,7 @@ const Booking = ({ classBooking, classBook }) => {
         }
 
         axios.post('/api/add_book', {
-            GstEmail: sessionStorage.getItem('email'),
+            GstEmail: user?.email,
             ApsClass: classBook,
             BokCost: cost,
             BokDateSt: start.value,
@@ -78,19 +98,19 @@ const Booking = ({ classBooking, classBook }) => {
                         <span>ФИО: </span>
                     </div>
                     <div className='el el-2'>
-                        <span>{sessionStorage.getItem('name')} </span>
+                        <span>{user?.name} </span>
                     </div>
                     <div className='el el-3'>
                         <span>Телефон: </span>
                     </div>
                     <div className='el el-4'>
-                        <span>{sessionStorage.getItem('phone')} </span>
+                        <span>{user?.phone} </span>
                     </div>
                     <div className='el el-5'>
                         <span>Email: </span>
                     </div>
                     <div className='el el-6'>
-                        <span>{sessionStorage.getItem('email')} </span>
+                        <span>{user?.email} </span>
                     </div>
                     <div className='el el-7'>
                         <span>Класс аппартаментом: </span>

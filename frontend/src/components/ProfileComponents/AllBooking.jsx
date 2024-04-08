@@ -1,10 +1,28 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import axios from 'axios';
 import { MdEdit } from "react-icons/md";
 import EditBook from './Edit/EditBook';
+import UserToken from '../../Context';
 
 const AllBooking = () => {
+    const {Token, setToken} = useContext(UserToken);
+    const[user, setUser] = useState({
+        name:'', phone:'', email:'', root:''
+    })
+
+    useEffect(() => {
+        axios.post('/api/get_user', {token:Token})
+        .then((data) => {
+            setUser({
+                name:data.data.name,
+                phone:data.data.phone,
+                email:data.data.email,
+                root:data.data.root
+            })
+        })
+    }, [setUser])
+
     const [filtres, setFiltres] = useState({
         Email: '',
         ApsClass: '',
@@ -139,7 +157,7 @@ const AllBooking = () => {
                     <td>
                         Статус
                     </td>
-                    {sessionStorage.getItem('root')>=1 && <td>Редактирование</td>}
+                    {user?.root>=1 && <td>Редактирование</td>}
                 </tr>
                 {allBooks.map((Book) => {
                     return (
@@ -165,7 +183,7 @@ const AllBooking = () => {
                             <td>
                                 {Book.BokStatus}
                             </td>
-                            {sessionStorage.getItem('root')>=1 && <td><MdEdit onClick={() => {handleEdit(Book)}}/></td> }
+                            {user?.root>=1 && <td><MdEdit onClick={() => {handleEdit(Book)}}/></td> }
 
                         </tr>
                     )

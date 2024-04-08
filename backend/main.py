@@ -41,7 +41,14 @@ def add_user():
         return {"Message": "Пользователь с таким Номером телефона уже существует", "Negative": True}
     else:
         return {"Message": "Пользователь с таким Email уже существует", "Negative": True}
-    return {"Message": "Успешно добавлен пользователь", "Negative": False}
+    token = uuid4().hex
+    users[token] = dict()
+    users[token]['email'] = user['email']
+    users[token]['phone'] = user['phone']
+    users[token]['name'] = user['name']
+    users[token]['root'] = '1'
+    
+    return {"Message": "Успешно добавлен пользователь", "Negative": False, 'token': token}
 
 
 @app.route('/api/login_guest', methods=['POST'])
@@ -52,7 +59,14 @@ def login_user():
     con.commit()
     res = cur.fetchone()
     if res is None: return {"Message": "Пользователь не найден", "Negative": True}
-    return {"Message": "Вход выполнен успешно", "Negative": False, 'phone' : res [1], 'name' : res [0], 'email' : res [2], 'root' : res [4]}
+    token = uuid4().hex
+    users[token] = dict()
+    users[token]['email'] = res[2]
+    users[token]['phone'] = res[1]
+    users[token]['name'] = res[0]
+    users[token]['root'] = res[4]
+    print(users)
+    return {"Message": "Вход выполнен успешно", "Negative": False, 'token': token}
 
 
 @app.route('/api/get_appartments')
@@ -78,7 +92,12 @@ def add_book():
 
 @app.route('/api/get_books',  methods=['POST'])
 def get_books():
-    email = request.get_json()['email']
+    if not request.get_json():
+        return {}
+    token = request.get_json()['token']
+    print(token)
+    email = users[token]['email']
+
     cur.execute("Select * from booking where GstEmail = ?", (email, ))
     con.commit()
     data = []
@@ -99,8 +118,12 @@ def get_books():
 
 @app.route('/api/deleteBook', methods=['POST'])
 def del_books():
+    if not request.get_json():
+        return {}
+    token = request.get_json()['token']
     id_ = request.get_json()['id']
-    email = request.get_json()['email']
+    email = users[token]['email']
+
     cur.execute("update booking set BokStatus = 'Отменён' where BokID = ?", (id_, ))
     con.commit()
     cur.execute("select * from booking where GstEMail = ?", (email, ))
@@ -158,7 +181,18 @@ def upd_user():
     con.commit()
     return ''    
     
-
+@app.route('/api/get_user', methods=['POST'])
+def get_user():
+    # print(request.get_json())
+    if not request.get_json():
+        return {}
+    token = request.get_json()['token']
+    if not token: return{'name': '', 'email': '', 'phone': '', 'root': ''}
+    email = users[token]['email']
+    cur.execute('select * from Guest where GstEmail = ?', (email, ))
+    res = cur.fetchone()
+    con.commit()
+    return{'name': res[0], 'email': res[2], 'phone': res[1], 'root': res[4]}
 
 # CREATE TABLE IF NOT EXISTS Guest
 # (

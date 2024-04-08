@@ -1,17 +1,37 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState , useContext} from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import SelfBooking from './ProfileComponents/SelfBooking';
 import AllUsers from './ProfileComponents/AllUsers';
 import AllBooking from './ProfileComponents/AllBooking';
-
+import UserToken from '../Context';
 
 const Profile = () => {
     const navigate = useNavigate();
+    const {Token, setToken} = useContext(UserToken);
+    // console.log(Token);
     const handleLogout = () => {
-        sessionStorage.clear();
+        // sessionStorage.clear();
+        setToken('');
         navigate('/login');
     }
+    
+    const[user, setUser] = useState({
+        name:'', phone:'', email:'', root:''
+    })
+
+    useEffect(() => {
+        axios.post('/api/get_user', {token:Token})
+        .then((data) => {
+            setUser({
+                name:data.data.name,
+                phone:data.data.phone,
+                email:data.data.email,
+                root:data.data.root
+            })
+        })
+    }, [setUser])
+    
     const [info, setInfo] = useState(0);
     // const profiles = [<SelfBooking/>, <AllBooking/>, <AllUsers/>]
     const getProfile = (x) => {
@@ -23,6 +43,8 @@ const Profile = () => {
             default:
                 return <SelfBooking/> 
         }
+
+
     }
     return (
         <div className='Full'>
@@ -32,17 +54,17 @@ const Profile = () => {
 
                     <div class="profileContainer">
                         <div class="el el-1">
-                            <span>Email: {sessionStorage.getItem('email')}</span>
+                            <span>Email: {user?.email}</span>
                         </div>
                         <div class="el el-2">
-                            <span>ФИО: {sessionStorage.getItem('name')}</span>
+                            <span>ФИО: {user?.name}</span>
                         </div>
                         <div class="el el-3">
-                            <span>Телефон: {sessionStorage.getItem('phone')}</span>
+                            <span>Телефон: {user?.phone}</span>
                         </div>
 
                         <div class="el el-4">
-                            <span>Статус: {sessionStorage.getItem('root')==="1"?"Пользователь": (sessionStorage.getItem('root')==="2"?"Менеджер" : "Админ")}</span>
+                            <span>Статус: {user?.root==="1"?"Пользователь": (user?.root==="2"?"Менеджер" : "Админ")}</span>
                             
                         </div>
                     </div>
@@ -50,7 +72,7 @@ const Profile = () => {
                 </div>
 
             </div>
-            {sessionStorage.getItem("root") > 1 && (
+            {user?.root > 1 && (
                 <div className="profileAdmin" >
                     <input type="button" onClick={() => {setInfo(0)}} value="Свои брони" />
                     <input type="button" onClick={() => {setInfo(1)}} value="Все брони пользователей"/>

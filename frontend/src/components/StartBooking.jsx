@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext} from 'react'
 import axios from 'axios';
 import Booking from './Booking';
+import UserToken from '../Context';
 
 const StartBooking = () => {
     const [cards, setCards] = useState([])
@@ -13,6 +14,8 @@ const StartBooking = () => {
 
     }, [setCards ])
     
+    const {Token, setToken} = useContext(UserToken);
+
     return (
         <>
         <div className='sBookingFul'>
@@ -26,7 +29,7 @@ const StartBooking = () => {
                             <span>{elem.clas}</span>
                             <span>{elem.description}</span>
                             {
-                                sessionStorage.getItem('auth') === '1' && <input type="button" value="Забронировать" className='StartBookingBut' 
+                                Token != '' && <input type="button" value="Забронировать" className='StartBookingBut' 
                                 onClick={() => {setClassBook(elem.clas)} }/>
                             }
                             

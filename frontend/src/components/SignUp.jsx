@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import UserToken from '../Context';
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -11,6 +12,7 @@ const SignUp = () => {
         password: '',
         password2: ''
     });
+    const {Token, setToken} = useContext(UserToken);
 
     const handleUser = () => {
         if (user.password !== user.password2) {
@@ -27,13 +29,14 @@ const SignUp = () => {
                     alert(data.data.Message);
                 }
                 else{
-                    sessionStorage.setItem('name', user.name);
-                    sessionStorage.setItem('email', user.email);
-                    sessionStorage.setItem('phone', user.phone);
-                    sessionStorage.setItem('root', '1');
-                    sessionStorage.setItem('auth', "1");
+                    // sessionStorage.setItem('name', user.name);
+                    // sessionStorage.setItem('email', user.email);
+                    // sessionStorage.setItem('phone', user.phone);
+                    // sessionStorage.setItem('root', '1');
+                    // sessionStorage.setItem('auth', "1");
+                    setToken(data.data.token)
                     navigate('/');
-                    window.location.reload();
+                    //window.location.reload();
                 }
             });
         }
@@ -78,7 +81,7 @@ const SignUp = () => {
             {/* <button className='SignInBut'> 
                 Зарегестрироваться
             </button> */}
-            <input type="submit" value="Зарегестрироваться" className='SignInBut' onClick={handleUser}/>
+            <input type="button" value="Зарегестрироваться" className='SignInBut' onClick={handleUser}/>
             <Link to='/login'>Войти</Link>
         </form>
   )
