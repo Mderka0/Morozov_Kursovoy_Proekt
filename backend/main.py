@@ -3,6 +3,9 @@ from hashlib import sha256
 from flask import Flask, request, send_file
 from flask_cors import CORS
 from uuid import uuid4
+import threading
+
+lock = threading.Lock()
 
 app = Flask(__name__)
 CORS(app)
@@ -31,16 +34,22 @@ def add_user():
     user = request.get_json()
     # print(user)
     # print(sha256(user.get('password').encode('utf8')).hexdigest())
-    cur.execute("SELECT * FROM Guest WHERE GstEmail = ? OR GstPhone = ?", (user['email'], user['phone'] ,))
+    cur.execute("SELECT * FROM Guest WHERE GstEmail = ? OR GstPhone = ?", 
+                (user['email'], user['phone'] ,))
     con.commit()
     res = cur.fetchone()
     if res is None:
-        cur.execute("INSERT INTO Guest VALUES (?, ?, ?, ?, ?)", (user['name'], user['phone'], user['email'], sha256(f'{user["password"]}'.encode('utf8')).hexdigest(), 1, ))
+        cur.execute("INSERT INTO Guest VALUES (?, ?, ?, ?, ?)", 
+                    (user['name'], user['phone'], user['email'], 
+                     sha256(f'{user["password"]}'
+                            .encode('utf8')).hexdigest(), 1, ))
         con.commit()
     elif res[1] == user['phone']:
-        return {"Message": "Пользователь с таким Номером телефона уже существует", "Negative": True}
+        return {"Message": "Пользователь с таким Номером телефона уже существует",
+                 "Negative": True}
     else:
-        return {"Message": "Пользователь с таким Email уже существует", "Negative": True}
+        return {"Message": "Пользователь с таким Email уже существует",
+                 "Negative": True}
     token = uuid4().hex
     users[token] = dict()
     users[token]['email'] = user['email']
@@ -48,14 +57,16 @@ def add_user():
     users[token]['name'] = user['name']
     users[token]['root'] = '1'
     
-    return {"Message": "Успешно добавлен пользователь", "Negative": False, 'token': token}
+    return {"Message": "Успешно добавлен пользователь", "Negative": False,
+             'token': token}
 
 
 @app.route('/api/login_guest', methods=['POST'])
 def login_user():
     user = request.get_json()
     password = (sha256(user.get('password').encode('utf8')).hexdigest())
-    cur.execute('select * from Guest where GstEmail = ? AND GstPassword = ?', (user['email'], password, ) )
+    cur.execute('select * from Guest where GstEmail = ? AND GstPassword = ?',
+                 (user['email'], password, ) )
     con.commit()
     res = cur.fetchone()
     if res is None: return {"Message": "Пользователь не найден", "Negative": True}
@@ -65,7 +76,7 @@ def login_user():
     users[token]['phone'] = res[1]
     users[token]['name'] = res[0]
     users[token]['root'] = res[4]
-    print(users)
+    # print(users)
     return {"Message": "Вход выполнен успешно", "Negative": False, 'token': token}
 
 
@@ -85,7 +96,10 @@ def get_appartments():
 @app.route('/api/add_book',  methods=['POST'])
 def add_book():
     data = (request.get_json())
-    cur.execute("INSERT INTO booking VALUES (?, ?, ?, ?, ?, ?, ?)", (None, data['ApsClass'], data['GstEmail'], data['BokCost'], data['BokDateSt'], data['BokDateFn'], 'Ожидает подтверждения',))
+    cur.execute("INSERT INTO booking VALUES (?, ?, ?, ?, ?, ?, ?)", 
+                (None, data['ApsClass'], data['GstEmail'],
+                  data['BokCost'], data['BokDateSt'], 
+                  data['BokDateFn'], 'Ожидает подтверждения',))
     con.commit()
       
     return {"Message": "Успешно добавлен", "Negative": False}
@@ -169,30 +183,42 @@ def get_all_books():
 @app.route('/api/update_book', methods=['POST'])
 def upd_books():
     data = request.get_json()
-    cur.execute("update booking set BokStatus = ?, ApsClass = ?, BokCost = ? where BokID = ?", (data['BokStatus'], data['ApsClass'], data['BokCost'], data['id']))
+    cur.execute("update booking set BokStatus = ?, ApsClass = ?, BokCost = ? where BokID = ?", 
+                (data['BokStatus'], data['ApsClass'], data['BokCost'], data['id']))
     con.commit()
     return ''    
     
 @app.route('/api/update_user', methods=['POST'])
 def upd_user():
     data = request.get_json()
-    cur.execute("update Guest set GstFullName = ?, GstPhone = ?, GstEmail = ?, GstRoot = ? where GstEmail = ?", (data['name'], data['phone'], 
+    cur.execute(
+        "update Guest set GstFullName = ?, GstPhone = ?, GstEmail = ?, GstRoot = ? where GstEmail = ?",
+          (data['name'], data['phone'], 
                                                                                                                  data['email'], data['root'], data['email']))
     con.commit()
     return ''    
     
 @app.route('/api/get_user', methods=['POST'])
 def get_user():
-    # print(request.get_json())
     if not request.get_json():
         return {}
     token = request.get_json()['token']
     if not token: return{'name': '', 'email': '', 'phone': '', 'root': ''}
     email = users[token]['email']
-    cur.execute('select * from Guest where GstEmail = ?', (email, ))
-    res = cur.fetchone()
-    con.commit()
-    return{'name': res[0], 'email': res[2], 'phone': res[1], 'root': res[4]}
+    name = users[token]['name']
+    phone = users[token]['phone']
+    root = users[token]['root']
+
+    return{'name': name, 'email': email, 'phone': phone, 'root': root}
+
+    # try:
+    #     lock.acquire(True)
+    #     cur.execute('select * from Guest where GstEmail = ?', (email, ))
+    #     res = cur.fetchone()
+    # # con.commit()
+    # finally:
+    #     lock.release()
+    # return{'name': res[0], 'email': res[2], 'phone': res[1], 'root': res[4]}
 
 # CREATE TABLE IF NOT EXISTS Guest
 # (

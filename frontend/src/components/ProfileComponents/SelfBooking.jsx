@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState, useContext } from 'react'
 import axios from 'axios';
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdInfo } from "react-icons/md";
 import UserToken from '../../Context';
 
 const SelfBooking = () => {
@@ -35,7 +35,7 @@ const SelfBooking = () => {
     }, [setBooks])
 
     const handleDelete = (id_) => {
-        axios.post('/api/deleteBook', {id:id_,  email: user?.email}).then((data) => {
+        axios.post('/api/deleteBook', {id:id_,  token: Token}).then((data) => {
             setMes(data.data.Message);
             if (!data.data.Negative) {
                 setBooks(data.data.Books.reverse());
@@ -70,6 +70,7 @@ const SelfBooking = () => {
                         Статус
                     </td>
                     <td>Удалить</td>
+                    <td>Процедуры</td>
                 </tr>
                 {books.map((book) => {
                     return (
@@ -96,6 +97,7 @@ const SelfBooking = () => {
                                 {book.BokStatus}
                             </td>
                             <td>{book.BokStatus != 'Отменён' && <MdDelete onClick={() => {handleDelete(book.id)}}/>}</td>
+                            <td><MdInfo /></td>
                         </tr>
                         
                     )

@@ -81,7 +81,7 @@ const SignUp = () => {
             {/* <button className='SignInBut'> 
                 Зарегестрироваться
             </button> */}
-            <input type="button" value="Зарегестрироваться" className='SignInBut' onClick={handleUser}/>
+            <input type="button" value="Зарегистрироваться" className='SignInBut' onClick={handleUser}/>
             <Link to='/login'>Войти</Link>
         </form>
   )

@@ -77,7 +77,7 @@ const AllUsers = () => {
         }
         if (filtres.Status !='')
         {
-            temp = temp.filter((elem) => (elem.root=="1"?"Пользователь": (elem.root=="2"?"Менеджер" : "Админ")) == filtres.Status)
+            temp = temp.filter((elem) => (elem.root==1?"Пользователь": (elem.root==2?"Менеджер" : "Админ")) == filtres.Status)
         }
         setUsers(temp)
         
@@ -155,7 +155,7 @@ const AllUsers = () => {
                     <td>
                         Статус
                     </td>
-                    {user?.root>=1 && <td>Редактирование</td>}
+                    {user?.root>=3 && <td>Редактирование</td>}
                 </tr>
                 {users.map((user_cur, id) => {
                     return (
@@ -171,9 +171,9 @@ const AllUsers = () => {
                             </td>
                             <td>
                         
-                                {user_cur.root=="1"?"Пользователь": (user_cur.root=="2"?"Менеджер" : "Админ")}
+                                {user_cur.root==1?"Пользователь": (user_cur.root==2?"Менеджер" : "Админ")}
                             </td>
-                            {user?.root>=2 && <td><MdEdit onClick={() => {handleEdit(user_cur)}}/></td> }
+                            {user?.root>=3 && <td><MdEdit onClick={() => {handleEdit(user_cur)}}/></td> }
                         </tr>
                     )
                 })}

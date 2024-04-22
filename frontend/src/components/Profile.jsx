@@ -30,7 +30,7 @@ const Profile = () => {
                 root:data.data.root
             })
         })
-    }, [setUser])
+    }, [Token])
     
     const [info, setInfo] = useState(0);
     // const profiles = [<SelfBooking/>, <AllBooking/>, <AllUsers/>]
@@ -46,6 +46,7 @@ const Profile = () => {
 
 
     }
+    console.log(user?.root);
     return (
         <div className='Full'>
             <div className='profileInfoSpace'>
@@ -64,7 +65,7 @@ const Profile = () => {
                         </div>
 
                         <div class="el el-4">
-                            <span>Статус: {user?.root==="1"?"Пользователь": (user?.root==="2"?"Менеджер" : "Админ")}</span>
+                            <span>Статус: {user?.root==1?"Пользователь": (user?.root==2?"Менеджер" : "Админ")}</span>
                             
                         </div>
                     </div>
