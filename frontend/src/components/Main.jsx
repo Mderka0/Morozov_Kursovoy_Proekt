@@ -6,6 +6,8 @@ import Contacts from './Contacts'
 import StartBooking from './StartBooking'
 import MainPage from './MainPage'
 import Profile from './Profile'
+import Uslugi from './Uslugi'
+
 
 const Main = () => {
   return (
@@ -17,6 +19,7 @@ const Main = () => {
         <Route path='/profile' element={<Profile/>}/>
         <Route  path="/signup" element={<SignUp/>}/>
         <Route  path="/startBooking" element={<StartBooking/>}/>
+        <Route path="/uslugi/:id" element={<Uslugi/>}/>
       </Routes>
       
     </main>

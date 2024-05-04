@@ -1,8 +1,9 @@
 
 import React, { useEffect, useState, useContext } from 'react'
 import axios from 'axios';
-import { MdDelete, MdInfo } from "react-icons/md";
+import { MdDelete, MdInfo, MdDownload} from "react-icons/md";
 import UserToken from '../../Context';
+import { Link, useNavigate } from 'react-router-dom'
 
 const SelfBooking = () => {
 
@@ -43,6 +44,12 @@ const SelfBooking = () => {
         })
 
     }
+
+    const handleDownload = (book) => {
+        axios.post('/api/get_chek', {token: Token, clas: book.ApsClass,
+            start_date: book.BokDateSt, end_date: book.BokDateFn, price: book.BokCost,
+        id: book.id }, {responseType: 'blob'}).then((res) => {window.open(URL.createObjectURL(res.data))})
+    }
     
     return (
         <>
@@ -71,6 +78,7 @@ const SelfBooking = () => {
                     </td>
                     <td>Удалить</td>
                     <td>Процедуры</td>
+                    <td>Чек</td>
                 </tr>
                 {books.map((book) => {
                     return (
@@ -97,7 +105,8 @@ const SelfBooking = () => {
                                 {book.BokStatus}
                             </td>
                             <td>{book.BokStatus != 'Отменён' && <MdDelete onClick={() => {handleDelete(book.id)}}/>}</td>
-                            <td><MdInfo /></td>
+                            <td><Link to={'/uslugi/' + book.id} ><MdInfo /></Link></td>
+                            <td>{book.BokStatus != 'Отменён' && <MdDownload onClick={() => {handleDownload(book)}}/>} </td>
                         </tr>
                         
                     )

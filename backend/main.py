@@ -3,7 +3,9 @@ from hashlib import sha256
 from flask import Flask, request, send_file
 from flask_cors import CORS
 from uuid import uuid4
+from html2pdf import edit_html, PATH
 import threading
+import datetime as dt
 
 lock = threading.Lock()
 
@@ -109,7 +111,7 @@ def get_books():
     if not request.get_json():
         return {}
     token = request.get_json()['token']
-    print(token)
+    # print(token)
     email = users[token]['email']
 
     cur.execute("Select * from booking where GstEmail = ?", (email, ))
@@ -219,6 +221,40 @@ def get_user():
     # finally:
     #     lock.release()
     # return{'name': res[0], 'email': res[2], 'phone': res[1], 'root': res[4]}
+
+@app.route('/api/uslugi/<id_usl>')
+def uslugi(id_usl:int):
+    cur.execute('Select * from booking where BokId = ?', (id_usl, ))
+    resp = cur.fetchone()
+    clas = resp[1]
+    email = resp[2]
+    start = dt.datetime.strptime(resp[4], '%Y-%m-%d').date()
+    end = dt.datetime.strptime(resp[5], '%Y-%m-%d').date()
+    
+    # print(start, end, end - start)
+    cur.execute("Select * from uslugi where BokId = ?", (id_usl, ))
+    data = cur.fetchone()
+    temp = dict()
+    temp['UslId'] = data[0]
+    temp['BokId'] = data[1]
+    temp['UslClass'] = data[2]
+
+    return {'clas' : clas, 'email': email, 'days': (end-start).days, **temp }
+
+@app.route('/api/get_chek', methods=['POST'])
+def get_chek():
+    token = request.get_json()['token']
+    clas = request.get_json()['clas']
+    start_date = request.get_json()['start_date']
+    end_date = request.get_json()['end_date']
+    price = request.get_json()['price']
+    id = request.get_json()['id']
+    # token = request.get_json()['token']
+    fio = users[token]['name']
+    email = users[token]['email']
+    edit_html(id, fio, email, clas, start_date, end_date, price)
+    return send_file(PATH+f'chek{id}.pdf')
+
 
 # CREATE TABLE IF NOT EXISTS Guest
 # (
