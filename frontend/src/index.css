@@ -735,6 +735,9 @@ input
     margin: 1em;
     padding: 1em;
     margin-bottom: 2em;
+    gap: 1em;
+    font-size: larger;
+    
 }
 
 .day
@@ -742,8 +745,27 @@ input
     width: 90%;
     height: 5em;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-around;
     align-items: center;
     
 
+}
+
+.day div
+{
+    display: flex;
+    background-color: var(--secondColor);
+    /* padding: 0 1em; */
+}
+
+.day div span:not(:last-child)
+{
+    border-right: 1px solid white;
+    padding: 1em ; 
+}
+
+.day div span:last-child
+{
+    margin: 0 1em ;
 }

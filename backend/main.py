@@ -11,7 +11,7 @@ lock = threading.Lock()
 
 app = Flask(__name__)
 CORS(app)
-con = sqlite3.connect("hostel.db", check_same_thread=False)
+con = sqlite3.connect("f:/kursach/hostel.db", check_same_thread=False)
 cur = con.cursor()
 
 users = dict()
@@ -103,7 +103,27 @@ def add_book():
                   data['BokCost'], data['BokDateSt'], 
                   data['BokDateFn'], 'Ожидает подтверждения',))
     con.commit()
-      
+    cur.execute("Select BokID from booking where ApsClass = ? and GstEmail = ? \
+                and BokCost = ? and BokDateSt = ? and BokDateFn = ? ", 
+                ( data['ApsClass'], data['GstEmail'],
+                  data['BokCost'], data['BokDateSt'], 
+                  data['BokDateFn'],))
+    id = cur.fetchone()[0]
+    cur.execute("INSERT INTO uslugi VALUES (?, ?, ?)", 
+                (None, id, "Профилактика",))
+    con.commit()
+    cur.execute("Select UslId from uslugi where BokId =?",
+                (id,))
+    idUsl = cur.fetchone()[0]
+    proced = 'Массаж'
+    if data['ApsClass'] in ('B', 'C'):
+        proced += ', Физкультура'
+        if data['ApsClass'] == 'C':
+            proced += ', Соляная комната'
+    cur.execute("INSERT INTO procedure VALUES (?, ?, ?)", 
+                (None, idUsl, proced, ))
+    con.commit()
+    
     return {"Message": "Успешно добавлен", "Negative": False}
 
 @app.route('/api/get_books',  methods=['POST'])
@@ -196,7 +216,7 @@ def upd_user():
     cur.execute(
         "update Guest set GstFullName = ?, GstPhone = ?, GstEmail = ?, GstRoot = ? where GstEmail = ?",
           (data['name'], data['phone'], 
-                                                                                                                 data['email'], data['root'], data['email']))
+            data['email'], data['root'], data['email']))
     con.commit()
     return ''    
     
@@ -255,6 +275,21 @@ def get_chek():
     edit_html(id, fio, email, clas, start_date, end_date, price)
     return send_file(PATH+f'chek{id}.pdf')
 
+
+@app.route('/api/set_uslugi', methods=['POST'])
+def set_uslugi():
+    uslId = request.get_json()['UslId']
+    uslClass = request.get_json()['UslClass']
+    proc = request.get_json()['Proc']
+
+    cur.execute(
+        "update uslugi set UslClass = ? where UslId = ?",
+          (uslClass, uslId, ))
+    cur.execute('update procedure set ProcName = ? where UslId = ?',
+                (proc, uslId, ))
+    con.commit()
+    return ''    
+    
 
 # CREATE TABLE IF NOT EXISTS Guest
 # (

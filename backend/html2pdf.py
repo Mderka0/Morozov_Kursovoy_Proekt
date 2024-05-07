@@ -5,7 +5,7 @@ import os, time, base64
 
 PATH = 'f:/kursach/backend/'
 
-API_KEY = '2ef3b5f598e35435d0e37355928e30b2'
+API_KEY = '9dfacc44c4d37f61ba01efcb799a5fff'
 
 
 
@@ -48,13 +48,16 @@ def edit_html(
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
     }
-    with open(PATH + 'chek_res.html', 'rb') as file:
-        content = base64.b64encode(file.read())
-    data = '{ "apikey": "2ef3b5f598e35435d0e37355928e30b2", "input": "base64", "filename": "f:/kursach/backend/chek_res.html", "outputformat":"pdf", "file": "%s"}' % content
-
+    data = '{ "apikey": "9dfacc44c4d37f61ba01efcb799a5fff", "input": "upload", "outputformat":"pdf"}' 
     response = requests.post('http://api.convertio.co/convert', headers=headers, data=data).json()
+    with open(PATH + 'chek_res.html', 'rb') as file:
+        content = file.read()
+
+    # print(response)
+    # print(response['data']['id'])
     print(response)
-    print(response['data']['id'])
+    response = requests.put(f'http://api.convertio.co/convert/{response["data"]["id"]}/chek_res.html', data=content).json()
+    # print(response)
     if response['code'] == 200:
         response1 = requests.get(f'http://api.convertio.co/convert/{response['data']['id']}/dl').json()
         while response1['code'] != 200:
@@ -63,8 +66,8 @@ def edit_html(
     # path = os.path.abspath(PATH+"chek_res.html")
     # converter.convert(f"file:///{path}", PATH+f"chek{id}.pdf")
     content = response1['data']['content']
-    print(content)
+    # print(response1)
     with open(PATH + f'chek{id}.pdf', 'wb') as file:
         file.write(base64.b64decode(content))
-edit_html()
+# edit_html()
     
