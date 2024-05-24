@@ -49,7 +49,7 @@ const SignIn = () => {
                 </div>
             </div>
             <input  type='button' value='Войти' className='SignInBut' onClick={handleLogin}/>
-            <Link to='/signup'>Зарегестрироваться</Link>
+            <Link to='/signup'>Зарегистрироваться</Link>
         </form>
 
 

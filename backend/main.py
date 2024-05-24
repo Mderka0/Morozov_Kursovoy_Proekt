@@ -8,12 +8,10 @@ import threading
 import datetime as dt
 
 lock = threading.Lock()
-
 app = Flask(__name__)
 CORS(app)
 con = sqlite3.connect("f:/kursach/hostel.db", check_same_thread=False)
 cur = con.cursor()
-
 users = dict()
 
 
