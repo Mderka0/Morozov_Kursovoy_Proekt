@@ -58,13 +58,15 @@ def edit_html(
     # print(response)
     # print(response['data']['id'])
     print(response)
-    response = requests.put(f'http://api.convertio.co/convert/{response["data"]["id"]}/chek_res.html', data=content).json()
+    x = response["data"]["id"]
+    response = requests.put(f'http://api.convertio.co/convert/{x}/chek_res.html', data=content).json()
     # print(response)
     if response['code'] == 200:
-        response1 = requests.get(f'http://api.convertio.co/convert/{response['data']['id']}/dl').json()
+        y = response['data']['id']
+        response1 = requests.get(f'http://api.convertio.co/convert/{y}/dl').json()
         while response1['code'] != 200:
             time.sleep(1)
-            response1 = requests.get(f'http://api.convertio.co/convert/{response['data']['id']}/dl').json()
+            response1 = requests.get(f'http://api.convertio.co/convert/{y}/dl').json()
     # path = os.path.abspath(PATH+"chek_res.html")
     # converter.convert(f"file:///{path}", PATH+f"chek{id}.pdf")
     content = response1['data']['content']
