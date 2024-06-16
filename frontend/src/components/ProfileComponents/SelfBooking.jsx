@@ -78,7 +78,7 @@ const SelfBooking = () => {
                     </td>
                     <td>Удалить</td>
                     <td>Процедуры</td>
-                    <td>Чек</td>
+                    <td>Отчёт</td>
                 </tr>
                 {books.map((book) => {
                     return (

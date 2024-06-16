@@ -4,7 +4,7 @@ from typing import Union
 import os, time, base64
 
 PATH = 'f:/kursach/backend/'
-
+# f:/kursach/backend/
 API_KEY = '9dfacc44c4d37f61ba01efcb799a5fff'
 
 

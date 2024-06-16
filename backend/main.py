@@ -1,6 +1,6 @@
 import sqlite3
 from hashlib import sha256
-from flask import Flask, request, send_file
+from flask import Flask, request, send_file, jsonify
 from flask_cors import CORS
 from uuid import uuid4
 from html2pdf import edit_html, PATH
@@ -10,7 +10,7 @@ import datetime as dt
 lock = threading.Lock()
 app = Flask(__name__)
 CORS(app)
-con = sqlite3.connect("f:/kursach/hostel.db", check_same_thread=False)
+con = sqlite3.connect("./hostel.db", check_same_thread=False)
 cur = con.cursor()
 users = dict()
 
@@ -32,52 +32,96 @@ def get_guests():
 @app.route('/api/add_guest', methods=['POST'])
 def add_user():
     user = request.get_json()
-    # print(user)
-    # print(sha256(user.get('password').encode('utf8')).hexdigest())
-    cur.execute("SELECT * FROM Guest WHERE GstEmail = ? OR GstPhone = ?", 
-                (user['email'], user['phone'] ,))
+    email = user['email']
+    phone = user['phone']
+    name = user['name']
+    password = sha256(user['password'].encode('utf8')).hexdigest()
+    cur.execute("SELECT * FROM Guest WHERE GstEmail = ? OR GstPhone = ?", (email, phone))
     con.commit()
     res = cur.fetchone()
     if res is None:
-        cur.execute("INSERT INTO Guest VALUES (?, ?, ?, ?, ?)", 
-                    (user['name'], user['phone'], user['email'], 
-                     sha256(f'{user["password"]}'
-                            .encode('utf8')).hexdigest(), 1, ))
+        cur.execute("INSERT INTO Guest VALUES (?, ?, ?, ?, ?)", (name, phone, email, password, 1))
         con.commit()
-    elif res[1] == user['phone']:
-        return {"Message": "Пользователь с таким Номером телефона уже существует",
-                 "Negative": True}
+    elif res[1] == phone:
+        return {"Message": "Пользователь с таким Номером телефона уже существует", "Negative": True}
     else:
-        return {"Message": "Пользователь с таким Email уже существует",
-                 "Negative": True}
+        return {"Message": "Пользователь с таким Email уже существует", "Negative": True}
     token = uuid4().hex
-    users[token] = dict()
-    users[token]['email'] = user['email']
-    users[token]['phone'] = user['phone']
-    users[token]['name'] = user['name']
-    users[token]['root'] = '1'
+    users[token] = {
+        'email': email,
+        'phone': phone,
+        'name': name,
+        'root': '1'
+    }
+    return {"Message": "Успешно добавлен пользователь", "Negative": False, 'token': token}
+
+# @app.route('/api/add_guest', methods=['POST'])
+# def add_user():
+#     user = request.get_json()
+#     cur.execute("SELECT * FROM Guest WHERE GstEmail = ? OR GstPhone = ?", 
+#                 (user['email'], user['phone'] ,))
+#     con.commit()
+#     res = cur.fetchone()
+#     if res is None:
+#         cur.execute("INSERT INTO Guest VALUES (?, ?, ?, ?, ?)", 
+#                     (user['name'], user['phone'], user['email'], 
+#                      sha256(f'{user["password"]}'
+#                             .encode('utf8')).hexdigest(), 1, ))
+#         con.commit()
+#     elif res[1] == user['phone']:
+#         return {"Message": "Пользователь с таким Номером телефона уже существует",
+#                  "Negative": True}
+#     else:
+#         return {"Message": "Пользователь с таким Email уже существует",
+#                  "Negative": True}
+#     token = uuid4().hex
+#     users[token] = dict()
+#     users[token]['email'] = user['email']
+#     users[token]['phone'] = user['phone']
+#     users[token]['name'] = user['name']
+#     users[token]['root'] = '1'
     
-    return {"Message": "Успешно добавлен пользователь", "Negative": False,
-             'token': token}
+#     return {"Message": "Успешно добавлен пользователь", "Negative": False,
+#              'token': token}
 
 
 @app.route('/api/login_guest', methods=['POST'])
 def login_user():
     user = request.get_json()
-    password = (sha256(user.get('password').encode('utf8')).hexdigest())
-    cur.execute('select * from Guest where GstEmail = ? AND GstPassword = ?',
-                 (user['email'], password, ) )
+    password = sha256(user.get('password').encode('utf8')).hexdigest()
+    cur.execute('SELECT * FROM Guest WHERE GstEmail = ? AND GstPassword = ?',
+                 (user['email'], password,))
     con.commit()
     res = cur.fetchone()
-    if res is None: return {"Message": "Пользователь не найден", "Negative": True}
+    if res is None:
+        return {"Message": "Пользователь не найден", "Negative": True}
+    
     token = uuid4().hex
-    users[token] = dict()
-    users[token]['email'] = res[2]
-    users[token]['phone'] = res[1]
-    users[token]['name'] = res[0]
-    users[token]['root'] = res[4]
-    # print(users)
+    users[token] = {
+        'email': res[2],
+        'phone': res[1],
+        'name': res[0],
+        'root': res[4]
+    }
+    
     return {"Message": "Вход выполнен успешно", "Negative": False, 'token': token}
+
+# @app.route('/api/login_guest', methods=['POST'])
+# def login_user():
+#     user = request.get_json()
+#     password = (sha256(user.get('password').encode('utf8')).hexdigest())
+#     cur.execute('select * from Guest where GstEmail = ? AND GstPassword = ?',
+#                  (user['email'], password, ) )
+#     con.commit()
+#     res = cur.fetchone()
+#     if res is None: return {"Message": "Пользователь не найден", "Negative": True}
+#     token = uuid4().hex
+#     users[token] = dict()
+#     users[token]['email'] = res[2]
+#     users[token]['phone'] = res[1]
+#     users[token]['name'] = res[0]
+#     users[token]['root'] = res[4]
+#     return {"Message": "Вход выполнен успешно", "Negative": False, 'token': token}
 
 
 @app.route('/api/get_appartments')
@@ -124,59 +168,115 @@ def add_book():
     
     return {"Message": "Успешно добавлен", "Negative": False}
 
-@app.route('/api/get_books',  methods=['POST'])
+@app.route('/api/get_books', methods=['POST'])
 def get_books():
     if not request.get_json():
         return {}
+    
     token = request.get_json()['token']
-    # print(token)
     email = users[token]['email']
 
-    cur.execute("Select * from booking where GstEmail = ?", (email, ))
+    cur.execute("SELECT * FROM booking WHERE GstEmail = ?", (email,))
     con.commit()
-    data = []
-    for book in cur.fetchall():
-        temp = dict()
-        temp['id'] = book[0]
-        temp['ApsClass'] = book[1]
-        temp['GstEmail'] = book[2]
-        temp['BokCost'] = book[3]
-        temp['BokDateSt'] = book[4]
-        temp['BokDateFn'] = book[5]
-        temp['BokStatus'] = book[6]
-        data.append(temp)
-                
-    if data: 
+    
+    data = [
+        {
+            'id': book[0],
+            'ApsClass': book[1],
+            'GstEmail': book[2],
+            'BokCost': book[3],
+            'BokDateSt': book[4],
+            'BokDateFn': book[5],
+            'BokStatus': book[6]
+        }
+        for book in cur.fetchall()
+    ]
+    
+    if data:
         return {"Message": "", "Negative": False, 'Books': data}
-    return{"Message": "Пока пусто", "Negative": True}
+    return {"Message": "Пока пусто", "Negative": True}
+
+# @app.route('/api/get_books',  methods=['POST'])
+# def get_books():
+#     if not request.get_json():
+#         return {}
+#     token = request.get_json()['token']
+#     email = users[token]['email']
+
+#     cur.execute("Select * from booking where GstEmail = ?", (email, ))
+#     con.commit()
+#     data = []
+#     for book in cur.fetchall():
+#         temp = dict()
+#         temp['id'] = book[0]
+#         temp['ApsClass'] = book[1]
+#         temp['GstEmail'] = book[2]
+#         temp['BokCost'] = book[3]
+#         temp['BokDateSt'] = book[4]
+#         temp['BokDateFn'] = book[5]
+#         temp['BokStatus'] = book[6]
+#         data.append(temp)
+                
+#     if data: 
+#         return {"Message": "", "Negative": False, 'Books': data}
+#     return{"Message": "Пока пусто", "Negative": True}
+
 
 @app.route('/api/deleteBook', methods=['POST'])
 def del_books():
+    data = []
     if not request.get_json():
         return {}
     token = request.get_json()['token']
     id_ = request.get_json()['id']
     email = users[token]['email']
-
-    cur.execute("update booking set BokStatus = 'Отменён' where BokID = ?", (id_, ))
+    cur.execute("UPDATE booking SET BokStatus = 'Отменён' WHERE BokID = ?", (id_,))
     con.commit()
-    cur.execute("select * from booking where GstEMail = ?", (email, ))
+    cur.execute("SELECT * FROM booking WHERE GstEMail = ?", (email,))
     con.commit()
-    data = []
     for book in cur.fetchall():
-        temp = dict()
-        temp['id'] = book[0]
-        temp['ApsClass'] = book[1]
-        temp['GstEmail'] = book[2]
-        temp['BokCost'] = book[3]
-        temp['BokDateSt'] = book[4]
-        temp['BokDateFn'] = book[5]
-        temp['BokStatus'] = book[6]
+        temp = {
+            'id': book[0],
+            'ApsClass': book[1],
+            'GstEmail': book[2],
+            'BokCost': book[3],
+            'BokDateSt': book[4],
+            'BokDateFn': book[5],
+            'BokStatus': book[6]
+        }
         data.append(temp)
-                
-    if data: 
+    
+    if data:
         return {"Message": "", "Negative": False, 'Books': data}
-    return{"Message": "Пока пусто", "Negative": True}
+    return {"Message": "Пока пусто", "Negative": True}
+
+# @app.route('/api/deleteBook', methods=['POST'])
+# def del_books():
+#     if not request.get_json():
+#         return {}
+#     token = request.get_json()['token']
+#     id_ = request.get_json()['id']
+#     email = users[token]['email']
+
+#     cur.execute("update booking set BokStatus = 'Отменён' where BokID = ?", (id_, ))
+#     con.commit()
+#     cur.execute("select * from booking where GstEMail = ?", (email, ))
+#     con.commit()
+#     data = []
+#     for book in cur.fetchall():
+#         temp = dict()
+#         temp['id'] = book[0]
+#         temp['ApsClass'] = book[1]
+#         temp['GstEmail'] = book[2]
+#         temp['BokCost'] = book[3]
+#         temp['BokDateSt'] = book[4]
+#         temp['BokDateFn'] = book[5]
+#         temp['BokStatus'] = book[6]
+#         data.append(temp)
+                
+#     if data: 
+#         return {"Message": "", "Negative": False, 'Books': data}
+#     return{"Message": "Пока пусто", "Negative": True}
     
 
 @app.route('/api/get_all_books')
@@ -299,6 +399,6 @@ def set_uslugi():
 # );
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5000, host="0.0.0.0")
     cur.close()
     con.close()
