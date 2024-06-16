@@ -1,9 +1,10 @@
 import requests
 from pyhtml2pdf import converter
 from typing import Union
-import os, time, base64
+import os, time, base64, sys
 
-PATH = 'f:/kursach/backend/'
+DIRECTORY = sys.path[0] + ("/" if "/" in __file__ else "\\")
+# PATH = 'f:/kursach/backend/'
 # f:/kursach/backend/
 API_KEY = '9dfacc44c4d37f61ba01efcb799a5fff'
 
@@ -19,7 +20,8 @@ def edit_html(
         price: Union[str | int | float] = 2100,
         profile: str = "Профилактика"
 ):
-    with open(PATH+"chek.html", "r", encoding='utf-8') as f:
+    with open(DIRECTORY
+    +"chek.html", "r", encoding='utf-8') as f:
         shablon = f.read()
     # shablon = shablon.format(
     #     id=id,
@@ -41,7 +43,7 @@ def edit_html(
     .replace('price', str(price))\
     .replace('profile', profile)
 
-    with open(PATH+"chek_res.html", "w", encoding='utf-8') as f:
+    with open(DIRECTORY+"chek_res.html", "w", encoding='utf-8') as f:
         f.write(shablon)
 
 
@@ -50,7 +52,7 @@ def edit_html(
     }
     data = '{ "apikey": "9dfacc44c4d37f61ba01efcb799a5fff", "input": "upload", "outputformat":"pdf"}' 
     response = requests.post('http://api.convertio.co/convert', headers=headers, data=data).json()
-    with open(PATH + 'chek_res.html', 'rb') as file:
+    with open(DIRECTORY + 'chek_res.html', 'rb') as file:
         content = file.read()
 
     # print(response)
@@ -67,7 +69,7 @@ def edit_html(
     # converter.convert(f"file:///{path}", PATH+f"chek{id}.pdf")
     content = response1['data']['content']
     # print(response1)
-    with open(PATH + f'chek{id}.pdf', 'wb') as file:
+    with open(DIRECTORY + f'chek{id}.pdf', 'wb') as file:
         file.write(base64.b64decode(content))
 # edit_html()
     

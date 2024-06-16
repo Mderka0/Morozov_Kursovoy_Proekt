@@ -3,14 +3,15 @@ from hashlib import sha256
 from flask import Flask, request, send_file, jsonify
 from flask_cors import CORS
 from uuid import uuid4
-from html2pdf import edit_html, PATH
-import threading
+from html2pdf import edit_html
+import threading, sys
 import datetime as dt
 
+DIRECTORY = sys.path[0] + ("/" if "/" in __file__ else "\\")
 lock = threading.Lock()
 app = Flask(__name__)
 CORS(app)
-con = sqlite3.connect("./hostel.db", check_same_thread=False)
+con = sqlite3.connect(DIRECTORY+"hostel.db", check_same_thread=False)
 cur = con.cursor()
 users = dict()
 
