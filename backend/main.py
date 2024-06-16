@@ -372,7 +372,7 @@ def get_chek():
     fio = users[token]['name']
     email = users[token]['email']
     edit_html(id, fio, email, clas, start_date, end_date, price)
-    return send_file(PATH+f'chek{id}.pdf')
+    return send_file(DIRECTORY+f'chek{id}.pdf')
 
 
 @app.route('/api/set_uslugi', methods=['POST'])
